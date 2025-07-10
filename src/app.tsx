@@ -33,6 +33,11 @@ const App: React.FC = () => {
         >
           Click me! Count value {count}
         </button>
+        <div className="bg-yellow-100 p-3 rounded mt-4">
+          <span className="text-yellow-800 font-medium">
+            Access Preload methods with type safety: {window.electronAPI.desktop ? "True" : "False"}
+          </span>
+        </div>
       </div>
     </div>
   );

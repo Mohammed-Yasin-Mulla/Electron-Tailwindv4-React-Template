@@ -107,6 +107,69 @@ const MyComponent: React.FC = () => {
 };
 ```
 
+## 🛡️ Type-Safe Preload API
+
+This template provides **complete type safety** when accessing Electron preload methods from your React components. No more `any` types or runtime errors!
+
+### How It Works
+
+The template implements a robust type safety system:
+
+1. **Single Source of Truth**: All API types are defined in `src/types/electron-api.ts`
+2. **Preload Bridge**: `src/preload.ts` exposes typed methods via `contextBridge`
+3. **Global Types**: `src/types/electron.d.ts` extends the Window interface
+4. **Full IntelliSense**: Get autocomplete and type checking in your React components
+
+### Example Usage
+
+```tsx
+// ✅ Fully typed - IntelliSense works!
+const isDesktop = window.electronAPI.desktop;
+const isMobile = window.electronAPI.mobile;
+const isTablet = window.electronAPI.tablet;
+
+// ✅ TypeScript will catch errors at compile time
+// window.electronAPI.nonExistentMethod; // ❌ TypeScript error
+```
+
+### Adding New API Methods
+
+1. **Define the interface** in `src/types/electron-api.ts`:
+   ```ts
+   export interface ElectronAPI {
+     desktop: boolean;
+     mobile: boolean;
+     tablet: boolean;
+     // Add your new methods here
+     openFile: () => Promise<string>;
+     saveData: (data: string) => Promise<void>;
+   }
+   ```
+
+2. **Implement in preload** in `src/preload.ts`:
+   ```ts
+   const electronAPI: ElectronAPI = {
+     desktop: true,
+     mobile: false,
+     tablet: false,
+     openFile: async () => {
+       // Your implementation
+       return "file-path";
+     },
+     saveData: async (data: string) => {
+       // Your implementation
+     }
+   };
+   ```
+
+3. **Use in React** with full type safety:
+   ```tsx
+   const handleOpenFile = async () => {
+     const filePath = await window.electronAPI.openFile(); // ✅ Typed!
+     // TypeScript knows filePath is a string
+   };
+   ```
+
 ## 🔧 Configuration
 
 ### Electron Forge
